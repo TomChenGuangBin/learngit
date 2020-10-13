@@ -1,0 +1,111 @@
+centos7安装git
+1：查看虚拟机是否存在git
+	rmp -qa | grep git
+2:云安装git
+	yum install git
+3:创建版本库
+ 3.1：选择合适的目录位置
+	cd /usr
+	mkdir learngit
+	cd learngit
+ 3.2:把这个目录变成git可以管理的仓库
+	git init
+ 3.3:编写一个readme.txt文件
+	touch readme.txt
+ 3.4:把文件添加到仓库
+	git add readme.txt
+ 3.5:用git commit 告诉Git,把文件提交到仓库
+	git commit -m "wrote a readme file"
+4:时光穿梭机
+ 4.1:查看文件当前仓库的状态
+	git status
+ 4.2:查看提交时的以前对比
+	git diff
+5:版本回退
+ 5.1:查看那历史记录
+	git log
+ 5.2:回退版本
+     5.2.1:回退到上一个版本：（也就是上次修改的内容）,
+	git reset --hard HEAD^    ----HEAD^^ -----HEAD~100
+     5.2.2:反悔回到原来的操作
+	查看commit id
+		git reflog
+	反回git reset --hard id
+6:工作区与暂存区
+     6.1:工作区
+	比如一个目录-------learngit
+     6.2:暂存区
+	使用git add把文件添加进去就是把其添加到暂存区
+	而使用git commit就是将暂存区的内容提交到当前分支(master)
+7:撤销修改
+     命令git checkout -- readme.txt
+	意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
+
+	一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+
+	一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+8:删除文件
+  	rm file(此时是在文件管理器中==工作区)----但是已经被我提交到仓库中--工作区和版本库就不一致了
+	git rm file(文件从版本库中删除)
+9:设置rsa	
+	ssh-keygen -t rsa -C "1049267385@qq.com"
+	此时会在默认的目录下产生 .ssh 目录 ----并有  id_rsa || id_rsa.pub两个文件
+	将id_rsa.pub内容复制到github中ssh keys中
+10:远程仓库
+    把本地仓库的内容推送到GitHub仓库
+	git remote add origin (githubssh的地址)
+	把本地库的所有内容推送到远程库上
+	git push -u origin master
+11:远程克隆仓库
+    11.1:登陆GitHub，创建一个新的仓库，名字叫gitskills
+    11.2:克隆仓库
+	git clone git@github.com:TomChenGuangBin/gitskills.git
+12:创建分支与合并
+    12.1：我们创建dev分支，然后切换到dev分支
+	git checkout -b dev
+    12.2:在分支上修改一个文件，并提交到仓库
+   12.3:dev分支的工作完成，我们就可以切换回master分支
+	git checkout master
+    12.4:把dev分支的工作成果合并到master分支上
+	git merge dev
+    12.5:删除dev分支了：(要注意当前的分支不是要删除的分支
+	git branch -d dev
+    12.6:查看分支
+	git branch
+13:解决冲突
+    13.1:当出现两个或多个分支修改文件时，都将该文件提交到仓库，当合并的时候就会发生错误
+    13.2:解决方法，将最后的文件修改成一致，并提交到仓库即可
+14:分支管理策略
+    通常，合并分支时，如果可能，Git会用Fast forward模式，但这种模式下，删除分支后，会丢掉分支信息。
+     如果要强制禁用Fast forward模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。
+        git merge --no-ff -m "merge with no-ff" dev
+        请注意--no-ff参数，表示禁用Fast forward
+        本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去
+15:操作标签
+    15.1: 创建
+       git tag v1.0
+    15.2:查看
+       git tag
+    15.3:历史提交的commit id，然后打上就可以了
+       git log --pretty=oneline --abbrev-commit
+       git tag 标签 id
+    15.4:创建带有说明的标签，用-a指定标签名，-m指定说明文字
+       git tag -a 标签 -m "说明" id
+    15.5：查看特定的标签
+       git show 标签
+    15.6:删除标签
+       git tag -d 标签
+    15.7:删除远程标签
+       git tag -d 标签
+       git push origin :refs/tags/标签
+    15.8:要推送某个标签到远程
+       git push origin 标签
+       推送所有
+       git push origin --tags
+        
+        
+
+
+
+
+
